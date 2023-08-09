@@ -1,0 +1,9 @@
+.slide {display: none; width: 600px; height:400px;}
+#slideshow .slide:first-child {display: block;}
+th{padding: 10px;font-size: 18px;color: #000;font-weight: 400;text-align: center;}
+td{padding: 5px;font-size: 18px;color: #000;font-weight: 400;}
+table{margin-bottom: 20px; padding: 10px;}
+th.title{width: 250px; height: 20px;}
+
+#prevButton {margin-right: 80px;}
+#nextButton {margin-left: 80px;}

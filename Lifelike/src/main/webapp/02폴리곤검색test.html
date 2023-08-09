@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사고 다발 구간</title>
+    <style>
+        /* 검색창 스타일 */
+        .searchBox {
+            position: absolute;
+            top: 60px;
+            right: 70px;
+        }
+
+        .searchBox .input-holder {
+            height: 70px;
+            width: 70px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0);
+            border-radius: 6px;
+            position: relative;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .searchBox.active .input-holder {
+            width: 450px;
+            border-radius: 50px;
+            background: rgb(255, 255, 255, 0.5);
+            transition: all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+        }
+
+        .searchBox .input-holder .search-input {
+            width: 100%;
+            height: 50px;
+            padding: 0px 70px 0 20px;
+            opacity: 0;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background: transparent;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            font-family: "Open Sans", Arial, Verdana;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 20px;
+            color: black;
+            transform: translate(0, 60px);
+            transition: all .3s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+            transition-delay: 0.3s;
+        }
+
+        .searchBox.active .input-holder .search-input {
+            opacity: 1;
+            transform: translate(0, 10px);
+        }
+
+        .searchBox .input-holder .search-icon {
+            width: 70px;
+            height: 70px;
+            border: none;
+            border-radius: 6px;
+            background: white;
+            padding: 0px;
+            outline: none;
+            position: relative;
+            z-index: 2;
+            float: right;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .searchBox.active .input-holder .search-icon {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            border-radius: 30px;
+        }
+
+        .searchBox .input-holder .search-icon span {
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            transform: rotate(45deg);
+            transition: all .4s cubic-bezier(0.650, -0.600, 0.240, 1.650);
+        }
+
+        .searchBox.active .input-holder .search-icon span {
+            transform: rotate(-45deg);
+        }
+
+        .searchBox .input-holder .search-icon span::before,
+        .searchBox .input-holder .search-icon span::after {
+            position: absolute;
+            content: '';
+        }
+
+        .searchBox .input-holder .search-icon span::before {
+            width: 4px;
+            height: 11px;
+            left: 9px;
+            top: 18px;
+            border-radius: 2px;
+            background: #FE5F55;
+        }
+
+        .searchBox .input-holder .search-icon span::after {
+            width: 14px;
+            height: 14px;
+            left: 0px;
+            top: 0px;
+            border-radius: 16px;
+            border: 4px solid #FE5F55;
+        }
+
+        .searchBox .close {
+            position: absolute;
+            z-index: 1;
+            top: 24px;
+            right: 20px;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            transform: rotate(-180deg);
+            transition: all .3s cubic-bezier(0.285, -0.450, 0.935, 0.110);
+            transition-delay: 0.2s;
+        }
+
+        .searchBox.active .close {
+            right: -50px;
+            transform: rotate(45deg);
+            transition: all .6s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+            transition-delay: 0.5s;
+        }
+
+        .searchBox .close::before,
+        .searchBox .close::after {
+            position: absolute;
+            content: '';
+            background: #FE5F55;
+            border-radius: 2px;
+        }
+
+        .searchBox .close::before {
+            width: 5px;
+            height: 25px;
+            left: 10px;
+            top: 0px;
+        }
+
+        .searchBox .close::after {
+            width: 25px;
+            height: 5px;
+            left: 0px;
+            top: 10px;
+        }
+
+        /* 지도 크기 */
+        #map {
+            height: 800px;
+        }
+
+        /* 폴리곤 설명 박스 */
+        #descriptionBox {
+            position: absolute;
+            top: 80px;
+            left: 17px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            text-align: center;
+        }
+
+        #descriptionBox p {
+            margin: 5px;
+        }
+
+        #descriptionBox .blue {
+            color: blue;
+        }
+
+        #descriptionBox .green {
+            color: green;
+        }
+
+        #descriptionBox .red {
+            color: red;
+        }
+
+        #descriptionBox .black {
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <div id="descriptionBox">
+
+        <p class="blue">파란원 : 사고 3회 이상</p>
+        <p class="green">초록원 : 사고 5회 이상</p>
+        <p class="red">빨간원 : 사고 8회 이상</p>
+        <p class="black">검정원 : 사망 사고 구역</p>
+    </div>
+
+    <div class="searchBox">
+        <div class="input-holder">
+            <input type="text" class="search-input" id="searchInput" placeholder="장소를 검색하세요." />
+            <button class="search-icon" onclick="searchToggle(this, event); searchLocation();"><span></span></button>
+        </div>
+        <span class="close" onclick="searchToggle(this, event);"></span>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbCzZPGJ5vi5q_OmF64r_LmnogUMn5qIQ&callback=initMap"defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+
+
+    <script>
+        let map;
+        let marker;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 36.5, lng: 128 },
+                zoom: 8,
+            });
+
+            // CSV 파일 경로
+            const csvFilepaths = [
+                
+                { path: 'img/poly1.csv', fillColor: '#0000ff' }, // 사고횟수 3,4번 162개 파랑 
+                { path: 'img/poly2.csv', fillColor: '#00ff00' }, // 사고횟수 5,6,7번 185개 초록 
+                { path: 'img/poly3.csv', fillColor: '#ff0000' }, // 사고횟수 8,9,10,11 13개 빨강
+                { path: 'img/polydeath.csv', fillColor: '#000000' }  // 사망 40개
+            ];
+
+            csvFilepaths.forEach((csvFile) => {
+                Papa.parse(csvFile.path, {
+                    download: true,
+                    header: false,
+                    skipEmptyLines: true,
+                    complete: function (results) {
+                        if (results && results.data) {
+                            for (const polygonStr of results.data) {
+                                if (polygonStr) {
+                                    const polygon = JSON.parse(polygonStr[0]);
+                                    if (polygon.type === "Polygon" && polygon.coordinates && polygon.coordinates.length > 0) {
+                                        const polygonPath = polygon.coordinates[0].map(coord => ({ lat: coord[1], lng: coord[0] }));
+                                        new google.maps.Polygon({
+                                            map,
+                                            paths: polygonPath,
+                                            fillColor: csvFile.fillColor,
+                                            fillOpacity: 0.4,
+                                            strokeColor: csvFile.fillColor,
+                                            strokeOpacity: 1.0,
+                                            strokeWeight: 2,
+                                        });
+                                    } else {
+                                        console.error("에러 : csv 잘못된 타입");
+                                    }
+                                } else {
+                                    console.error("에러 : 폴리곤데이터 없음");
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+        function searchToggle(obj, evt) {
+            var container = $(obj).closest('.searchBox');
+            if (!container.hasClass('active')) {
+                container.addClass('active');
+                evt.preventDefault();
+            } else if (container.hasClass('active') && $(obj).closest('.input-holder').length == 0) {
+                container.removeClass('active');
+                container.find('.search-input').val('');
+            }
+        }
+
+
+
+        function searchLocation() {
+            const input = document.getElementById("searchInput").value;
+            const geocoder = new google.maps.Geocoder();
+
+            if ($('.searchBox').hasClass('active')) {
+                geocoder.geocode({ address: input }, (results, status) => {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        // 이전 마커가 있으면 제거
+                        if (marker) {
+                            marker.setMap(null);
+                        }
+                        map.setCenter(results[0].geometry.location);
+                        marker = new google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location,
+                        });
+
+                        // 검색된 위치 확대하는 곳 조절하면 됨
+                        map.setZoom(14);
+                    } else {
+                        // alert("검색 결과를 찾을 수 없습니다."); 
+                        console.log("검색 결과를 찾을 수 없습니다.")
+                    }
+                });
+            }
+        }
+
+    </script>
+
+
+
+</body>
+
+</html>

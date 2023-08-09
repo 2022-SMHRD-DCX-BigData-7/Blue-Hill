@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전국날씨</title>
+    <style>
+        .searchBox {
+            position: absolute;
+            top: 60px;
+            right: 70px;
+        }
+
+        .searchBox .input-holder {
+            height: 70px;
+            width: 70px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0);
+            border-radius: 6px;
+            position: relative;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .searchBox.active .input-holder {
+            width: 450px;
+            border-radius: 50px;
+            background: rgb(255, 255, 255, 0.5);
+            transition: all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+        }
+
+        .searchBox .input-holder .search-input {
+            width: 100%;
+            height: 50px;
+            padding: 0px 70px 0 20px;
+            opacity: 0;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background: transparent;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            font-family: "Open Sans", Arial, Verdana;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 20px;
+            color: black;
+            transform: translate(0, 60px);
+            transition: all .3s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+            transition-delay: 0.3s;
+        }
+
+        .searchBox.active .input-holder .search-input {
+            opacity: 1;
+            transform: translate(0, 10px);
+        }
+
+        .searchBox .input-holder .search-icon {
+            width: 70px;
+            height: 70px;
+            border: none;
+            border-radius: 6px;
+            background: white;
+            padding: 0px;
+            outline: none;
+            position: relative;
+            z-index: 2;
+            float: right;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .searchBox.active .input-holder .search-icon {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            border-radius: 30px;
+        }
+
+        .searchBox .input-holder .search-icon span {
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            transform: rotate(45deg);
+            transition: all .4s cubic-bezier(0.650, -0.600, 0.240, 1.650);
+        }
+
+        .searchBox.active .input-holder .search-icon span {
+            transform: rotate(-45deg);
+        }
+
+        .searchBox .input-holder .search-icon span::before,
+        .searchBox .input-holder .search-icon span::after {
+            position: absolute;
+            content: '';
+        }
+
+        .searchBox .input-holder .search-icon span::before {
+            width: 4px;
+            height: 11px;
+            left: 9px;
+            top: 18px;
+            border-radius: 2px;
+            background: #FE5F55;
+        }
+
+        .searchBox .input-holder .search-icon span::after {
+            width: 14px;
+            height: 14px;
+            left: 0px;
+            top: 0px;
+            border-radius: 16px;
+            border: 4px solid #FE5F55;
+        }
+
+        .searchBox .close {
+            position: absolute;
+            z-index: 1;
+            top: 24px;
+            right: 20px;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            transform: rotate(-180deg);
+            transition: all .3s cubic-bezier(0.285, -0.450, 0.935, 0.110);
+            transition-delay: 0.2s;
+        }
+
+        .searchBox.active .close {
+            right: -50px;
+            transform: rotate(45deg);
+            transition: all .6s cubic-bezier(0.000, 0.105, 0.035, 1.570);
+            transition-delay: 0.5s;
+        }
+
+        .searchBox .close::before,
+        .searchBox .close::after {
+            position: absolute;
+            content: '';
+            background: #FE5F55;
+            border-radius: 2px;
+        }
+
+        .searchBox .close::before {
+            width: 5px;
+            height: 25px;
+            left: 10px;
+            top: 0px;
+        }
+
+        .searchBox .close::after {
+            width: 25px;
+            height: 5px;
+            left: 0px;
+            top: 10px;
+        }
+
+        #map {
+            height: 800px;
+            width: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <div class="searchBox">
+        <div class="input-holder">
+            <input type="text" class="search-input" id="searchInput" placeholder="장소를 검색하세요." />
+            <button class="search-icon" onclick="searchToggle(this, event); searchLocation();"><span></span></button>
+        </div>
+        <span class="close" onclick="searchToggle(this, event);"></span>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbCzZPGJ5vi5q_OmF64r_LmnogUMn5qIQ&callback=initMap"defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+
+
+    <script>
+        let marker;
+
+
+        window.initMap = function () {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 36, lng: 127.5 },
+                zoom: 7,
+            });
+
+            const malls = [
+                { name: "서울", lat: 37.5518911, lng: 126.9917937 },
+                { name: "부산", lat: 35.2100142, lng: 129.0688702 },
+                { name: "대구", lat: 35.8294374, lng: 128.5655119 },
+                { name: "인천", lat: 37.4562557, lng: 126.7052062 },
+                { name: "광주", lat: 35.1557358, lng: 126.8354271 },
+                { name: "대전", lat: 36.3398175, lng: 127.3940486 },
+                { name: "울산", lat: 35.5537228, lng: 129.2380554 },
+                { name: "세종", lat: 36.5606976, lng: 127.2587334 },
+                { name: "고양", lat: 37.6650719, lng: 126.8369961 },
+                { name: "수원", lat: 37.2803896, lng: 127.0077847 },
+                { name: "용인", lat: 37.2214872, lng: 127.2218612 },
+                { name: "과천", lat: 37.4338294, lng: 127.0027656 },
+                { name: "광명", lat: 37.4451612, lng: 126.8646989 },
+                { name: "광주시", lat: 37.4030854, lng: 127.3011624 },
+                { name: "구리", lat: 37.5990186, lng: 127.1313079 },
+                { name: "군포", lat: 37.3434691, lng: 126.9211003 },
+                { name: "김포", lat: 37.6818227, lng: 126.6265338 },
+                { name: "남양주", lat: 37.6625097, lng: 127.2436632 },
+                { name: "동두천", lat: 37.916543, lng: 127.0779171 },
+                { name: "부천", lat: 37.5042687, lng: 126.7886531 },
+                { name: "성남", lat: 37.4073695, lng: 127.1162181 },
+                { name: "시흥", lat: 37.3864796, lng: 126.7841675 },
+                { name: "안산", lat: 37.3218778, lng: 126.8308848 },
+                { name: "안성", lat: 37.035033, lng: 127.3027301 },
+                { name: "안양", lat: 37.4027313, lng: 126.9279179 },
+                { name: "양주", lat: 37.8086632, lng: 127.001143 },
+                { name: "여주", lat: 37.3024585, lng: 127.6157502 },
+                { name: "오산", lat: 37.1632991, lng: 127.0513324 },
+                { name: "의왕", lat: 37.3624626, lng: 126.9896996 },
+                { name: "의정부", lat: 37.7361884, lng: 127.0684356 },
+                { name: "이천", lat: 37.2097769, lng: 127.4810494 },
+                { name: "파주", lat: 37.8544244, lng: 126.8115232 },
+                { name: "평택", lat: 37.0159677, lng: 126.9941853 },
+                { name: "포천", lat: 37.9697852, lng: 127.2502925 },
+                { name: "하남", lat: 37.5228824, lng: 127.2059921 },
+                { name: "화성", lat: 37.1616306, lng: 126.8654604 },
+                { name: "강릉", lat: 37.7091295, lng: 128.8324462 },
+                { name: "동해", lat: 37.5067666, lng: 129.0555852 },
+                { name: "삼척", lat: 37.2773968, lng: 129.1220028 },
+                { name: "속초", lat: 38.17601, lng: 128.5194615 },
+                { name: "원주", lat: 37.3082307, lng: 127.9294889 },
+                { name: "춘천", lat: 37.8897796, lng: 127.7398952 },
+                { name: "태백", lat: 37.1722939, lng: 128.9800161 },
+                { name: "제천", lat: 37.0597328, lng: 128.141005 },
+                { name: "청주", lat: 36.6272962, lng: 127.498731 },
+                { name: "충주", lat: 37.0151461, lng: 127.8956693 },
+                { name: "계룡", lat: 36.2915841, lng: 127.2344325 },
+                { name: "공주", lat: 36.47982, lng: 127.0752196 },
+                { name: "논산", lat: 36.1908784, lng: 127.1577341 },
+                { name: "당진", lat: 36.9023743, lng: 126.6545022 },
+                { name: "보령", lat: 36.3331629, lng: 126.6129441 },
+                { name: "서산", lat: 36.7844993, lng: 126.4503169 },
+                { name: "아산", lat: 36.8073191, lng: 126.980066 },
+                { name: "천안", lat: 36.804138, lng: 127.2025586 },
+                { name: "군산", lat: 35.9676772, lng: 126.7366293 },
+                { name: "김제", lat: 35.8068736, lng: 126.8961044 },
+                { name: "남원", lat: 35.4225506, lng: 127.4418975 },
+                { name: "익산", lat: 36.0230799, lng: 126.9894962 },
+                { name: "전주", lat: 35.8280463, lng: 127.1160156 },
+                { name: "정읍", lat: 35.6026273, lng: 126.9058607 },
+                { name: "광양", lat: 35.0286487, lng: 127.6494094 },
+                { name: "나주", lat: 34.9883585, lng: 126.7201733 },
+                { name: "목포", lat: 34.8118351, lng: 126.3921664 },
+                { name: "순천", lat: 34.9946567, lng: 127.3894958 },
+                { name: "여수", lat: 34.7603737, lng: 127.6622221 },
+                { name: "경산", lat: 35.8337972, lng: 128.8090748 },
+                { name: "경주", lat: 35.8266161, lng: 129.235988 },
+                { name: "구미", lat: 36.207309, lng: 128.3555532 },
+                { name: "김천", lat: 36.0603835, lng: 128.0777247 },
+                { name: "문경", lat: 36.6910006, lng: 128.1488468 },
+                { name: "상주", lat: 36.4295654, lng: 128.0669313 },
+                { name: "안동", lat: 36.5802373, lng: 128.7800357 },
+                { name: "영주", lat: 36.8705017, lng: 128.5976721 },
+                { name: "영천", lat: 36.0156997, lng: 128.9427024 },
+                { name: "포항", lat: 36.0929227, lng: 129.3052666 },
+                { name: "창원", lat: 35.2028593, lng: 128.6000923 },
+                { name: "거제", lat: 34.8806427, lng: 128.6210824 },
+                { name: "김해", lat: 35.2721355, lng: 128.8452281 },
+                { name: "밀양", lat: 35.4984942, lng: 128.7895971 },
+                { name: "사천", lat: 35.0481566, lng: 128.1102419 },
+                { name: "양산", lat: 35.4018747, lng: 129.0410269 },
+                { name: "진주", lat: 35.205153, lng: 128.1297905 },
+                { name: "통영", lat: 34.8544227, lng: 128.433182 },
+                { name: "서귀포", lat: 33.2541205, lng: 126.560076 },
+                { name: "제주", lat: 33.4996213, lng: 126.5311884 },
+            ];
+
+            const bounds = new google.maps.LatLngBounds();
+            const infowindow = new google.maps.InfoWindow();
+
+            function displayWeatherInfoOnMapClick(event) {
+                const lat = event.latLng.lat();
+                const lng = event.latLng.lng();
+                const locationName = "선택 위치";
+
+                infowindow.setPosition(event.latLng);
+
+                // 현재 날씨 정보 표시
+                fetchWeatherInfo(lat, lng, locationName, infowindow, null, map);
+
+                // 3시간 후 예상 날씨 정보 표시
+                fetchWeatherInfo2(lat, lng, locationName, infowindow, null, map);
+            }
+
+
+            google.maps.event.addListener(map, "click", displayWeatherInfoOnMapClick);
+
+
+
+
+
+
+            malls.forEach(({ name, lat, lng }) => {
+                const iconSize = new google.maps.Size(25, 25); // 마커 크기 조정
+                const marker = new google.maps.Marker({
+                    position: { lat, lng },
+                    // label,
+                    map,
+                    icon: {
+                        url: "img/marker2.png", // 마커 경로
+                        size: iconSize,
+                        scaledSize: iconSize,
+                    },
+                });
+                bounds.extend(marker.position);
+
+                marker.addListener("click", () => {
+                    fetchWeatherInfo(lat, lng, name, infowindow, marker, map);
+                    fetchWeatherInfo2(lat, lng, name, infowindow, marker, map);
+                });
+            });
+
+            //map.fitBounds(bounds); -> 자동으로 마커 다보이게 줌 조절하는거 위에서 지정해놔서 필요없을듯
+        };
+    </script>
+
+    <script>
+        function wDescEngToKor(w_id) {
+            var w_id_arr = [201, 200, 202, 210, 211, 212, 221, 230, 231, 232,
+                300, 301, 302, 310, 311, 312, 313, 314, 321, 500,
+                501, 502, 503, 504, 511, 520, 521, 522, 531, 600,
+                601, 602, 611, 612, 615, 616, 620, 621, 622, 701,
+                711, 721, 731, 741, 751, 761, 762, 771, 781, 800,
+                801, 802, 803, 804, 900, 901, 902, 903, 904, 905,
+                906, 951, 952, 953, 954, 955, 956, 957, 958, 959,
+                960, 961, 962];
+            var w_kor_arr = ["가벼운 비를 동반한 천둥구름", "비를 동반한 천둥구름", "폭우를 동반한 천둥구름", "약한 천둥구름",
+                "천둥구름", "강한 천둥구름", "불규칙적 천둥구름", "약한 연무를 동반한 천둥구름", "연무를 동반한 천둥구름",
+                "강한 안개비를 동반한 천둥구름", "가벼운 안개비", "안개비", "강한 안개비", "가벼운 적은비", "적은비",
+                "강한 적은비", "소나기와 안개비", "강한 소나기와 안개비", "소나기", "악한 비", "중간 비", "강한 비",
+                "매우 강한 비", "극심한 비", "우박", "약한 소나기 비", "소나기 비", "강한 소나기 비", "불규칙적 소나기 비",
+                "가벼운 눈", "눈", "강한 눈", "진눈깨비", "소나기 진눈깨비", "약한 비와 눈", "비와 눈", "약한 소나기 눈",
+                "소나기 눈", "강한 소나기 눈", "박무", "연기", "연무", "모래 먼지", "안개", "모래", "먼지", "화산재", "돌풍",
+                "토네이도", "구름 한 점 없는 맑은 하늘", "약간의 구름이 낀 하늘", "드문드문 구름이 낀 하늘", "구름이 거의 없는 하늘",
+                "구름으로 뒤덮인 흐린 하늘", "토네이도", "태풍", "허리케인", "한랭", "고온", "바람부는", "우박", "바람이 거의 없는",
+                "약한 바람", "부드러운 바람", "중간 세기 바람", "신선한 바람", "센 바람", "돌풍에 가까운 센 바람", "돌풍",
+                "심각한 돌풍", "폭풍", "강한 폭풍", "허리케인"];
+            for (var i = 0; i < w_id_arr.length; i++) {
+                if (w_id_arr[i] == w_id) {
+                    return w_kor_arr[i];
+                    break;
+                }
+            }
+            return "none";
+        }
+
+    </script>
+
+
+    <script>
+        function fetchWeatherInfo(lat, lng, locationName, infowindow, marker, map) {
+            const apiKey = '61d09e0f76230a0e0b914f3e87c5a9dd';
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${apiKey}&units=metric`;
+
+            fetch(apiUrl)
+                .then((response) => response.json())
+                .then((data) => {
+                    const temperature = data.main.temp.toFixed(1); // 소숫점 지우려고
+                    const feelsLikeTemperature = data.main.feels_like.toFixed(1); // 소숫점 지우려고
+                    const weatherContent = `
+                
+                <h3>${locationName} 날씨 정보</h3>
+                <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="Weather Icon" style="width: 60px; height: 60px;">
+                <p>날씨: ${wDescEngToKor(data.weather[0].id)}</p> 
+                <p>온도: ${temperature}°C</p>
+                <p>체감 온도: ${feelsLikeTemperature}°C</p>
+                <p>습도: ${data.main.humidity}%</p>
+                <p>강수확률: ${data.clouds.all}%</p>
+                <p>바람 세기: ${data.wind.speed}m/s</p>
+                <hr>
+                
+            `;
+                    infowindow.setContent(weatherContent);
+                    infowindow.open(map, marker);
+                })
+                .catch((error) => {
+                    console.error("날씨 정보를 가져오는 데 실패했습니다.", error);
+                });
+        }
+
+        async function fetchWeatherInfo2(lat, lng, locationName, infowindow, marker, map) {
+            const apiKey = '61d09e0f76230a0e0b914f3e87c5a9dd';
+            const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&appid=${apiKey}&units=metric`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data && data.list && data.list.length >= 3) {
+                    const currentWeather = data.list[0]; // 현재 날씨 정보
+                    const forecastWeather = data.list[1]; // 3시간 후 예상 날씨 정보
+
+                    const currentWeatherContent = `
+                    <h3>${locationName} 현재 날씨</h3>
+                    <img src="https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}.png" alt="Weather Icon" style="width: 60px; height: 60px;">
+                    <p>날씨: ${wDescEngToKor(currentWeather.weather[0].id)}</p>
+                    <p>온도: ${currentWeather.main.temp.toFixed(1)}°C</p>
+                    <p>체감 온도: ${currentWeather.main.feels_like.toFixed(1)}°C</p>
+                    <p>습도: ${currentWeather.main.humidity}%</p>
+                    <p>강수확률: ${currentWeather.clouds.all}%</p>
+                    <p>바람 세기: ${currentWeather.wind.speed.toFixed(2)}m/s</p>
+                `;
+
+                    const forecastWeatherContent = `
+                    <h3>${locationName} 3시간 후 예상 날씨</h3>
+                    <img src="https://openweathermap.org/img/wn/${forecastWeather.weather[0].icon}.png" alt="Weather Icon" style="width: 60px; height: 60px;">
+                    <p>날씨: ${wDescEngToKor(forecastWeather.weather[0].id)}</p>
+                    <p>온도: ${forecastWeather.main.temp.toFixed(1)}°C</p>
+                    <p>체감 온도: ${forecastWeather.main.feels_like.toFixed(1)}°C</p>
+                    <p>습도: ${forecastWeather.main.humidity}%</p>
+                    <p>강수확률: ${forecastWeather.clouds.all}%</p>
+                    <p>바람 세기: ${forecastWeather.wind.speed.toFixed(2)}m/s</p>
+                `;
+
+                    const weatherContent = `${currentWeatherContent}<hr>${forecastWeatherContent}`;
+                    infowindow.setContent(weatherContent);
+                    infowindow.open(map, marker);
+                } else {
+                    console.error("3시간 후 예상 날씨 정보를 가져오는 데 실패했습니다.");
+                }
+            } catch (error) {
+                console.error("날씨 정보를 가져오는 데 실패했습니다.", error);
+            }
+        }
+
+
+        async function getWeather(city) {
+            const apiKey = '61d09e0f76230a0e0b914f3e87c5a9dd';
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                return {
+                    weatherDescription: data.weather[0].description,
+                    temperature: data.main.temp,
+                    feelsLikeTemperature: data.main.feels_like,
+                    humidity: data.main.humidity,
+                    precipitation: data.clouds.all
+                };
+            } catch (error) {
+                console.error(`날씨 정보를 가져오는 데 실패했습니다. (${city})`, error);
+                return null;
+            }
+        }
+
+        function searchToggle(obj, evt) {
+            var container = $(obj).closest('.searchBox');
+            if (!container.hasClass('active')) {
+                container.addClass('active');
+                evt.preventDefault();
+            } else if (container.hasClass('active') && $(obj).closest('.input-holder').length == 0) {
+                container.removeClass('active');
+                container.find('.search-input').val('');
+            }
+        }
+
+        function searchLocation() {
+            const input = document.getElementById("searchInput").value;
+            const geocoder = new google.maps.Geocoder();
+
+            if ($('.searchBox').hasClass('active')) {
+                geocoder.geocode({ address: input }, (results, status) => {
+                    if (status === google.maps.GeocoderStatus.OK) {
+                        // 이전 마커가 있으면 제거
+                        if (marker) {
+                            marker.setMap(null);
+                        }
+                        map.setCenter(results[0].geometry.location);
+                        // marker = new google.maps.Marker({
+                        //     map: map,
+                        //     position: results[0].geometry.location,
+                        // });
+
+                        // 검색된 위치 확대하는 곳 조절하면 됨
+                        map.setZoom(10);
+                    } else {
+                        // alert("검색 결과를 찾을 수 없습니다."); 
+                        console.log("검색 결과를 찾을 수 없습니다.")
+                    }
+                });
+            }
+        }
+
+
+        // displayWeatherInfo();
+    </script>
+
+    <div id="weatherInfo"></div>
+    <!-- 구글맵 키 : AIzaSyDbCzZPGJ5vi5q_OmF64r_LmnogUMn5qIQ -->
+    
+</body>
+
+</html>

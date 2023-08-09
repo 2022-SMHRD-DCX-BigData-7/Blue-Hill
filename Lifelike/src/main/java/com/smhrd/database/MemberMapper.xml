@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smhrd.database.MemberMapper">
+
+  	<insert id="insertMember" parameterType="com.smhrd.domain.userInfo">
+  		insert into userInfo values (#{id},#{pw},#{name},#{email},#{tel},#{gender},#{birthdate},#{region})
+  	</insert>
+	
+	<select id="selectMember" parameterType="com.smhrd.domain.userInfo" resultType="com.smhrd.domain.userInfo">
+		select * from userInfo where id=#{id} and pw=#{pw}
+	</select>
+	
+	<update id="updateMember" parameterType="com.smhrd.domain.userInfo">
+		update userInfo set pw=#{pw}, email=#{email}, tel=#{tel}, region=#{region}
+		where id=#{id}
+	</update>
+	
+	<delete id="deleteMember" parameterType="String">
+      delete from userInfo where id=#{id}
+	</delete>
+</mapper>
