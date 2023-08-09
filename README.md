@@ -30,6 +30,7 @@
             <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"/>
             <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"/>
             <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white"/>
+            <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white"/>
         </td>
     </tr>
     <tr>
@@ -44,6 +45,8 @@
         <td>
             <img src="https://img.shields.io/badge/Eclipse-2C2255?style=for-the-badge&logo=Eclipse&logoColor=white"/>
             <img src="https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=VisualStudioCode&logoColor=white"/>
+            <img src="https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=VisualStudioCode&logoColor=white"/>
+            <img src="https://img.shields.io/badge/Jupyter-F37626?style=for-the-badge&logo=Jupyter&logoColor=white"/>
         </td>
     </tr>
     <tr>
@@ -127,8 +130,8 @@
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/jsl2695" target='_blank'>jsl2695</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/minsikkkk" target='_blank'>minsikkkk</a></td>
+    <td align="center"><a href="https://github.com/ghkdehdgnlqwpoeurio" target='_blank'>ghkdehdgnlqwpoeurio</a></td>
     <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
     <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
   </tr>
@@ -137,18 +140,25 @@
 
 ## 🤾‍♂️ 트러블슈팅 <br> 
 * 문제1<br>
- >프리 템플렛등을 베이스로 여러CSS들을 복합적으로 사용하다보니 중복되는 클래스로 인해 의도하지 않은 디자인 형태가 나옴.
->중복된 클래스 또는 특정 디자인 값을 요구하는 클래스들을 수정, 독립적인 CSS값을 주어 해결.
+>프리 템플렛등을 베이스로 여러CSS들을 복합적으로 사용하다보니 중복되는 클래스로 인해 의도하지 않은 디자인 형태가 나옴.
+> 중복된 클래스 또는 특정 디자인 값을 요구하는 클래스들을 수정, 독립적인 CSS값을 주어 해결.
   
 * 문제2<br>
->기존 습득한 방식의 모달 기능을 응용해서 페이지의 내용을 표시하려 하였지만 다른 클래스들과 충돌이 발생해 원하는 결과을 얻을 수 없었음.
->모달 코드를 기존과 다르게 새롭게 구성하여 해결
+> 기존 습득한 방식의 모달 기능을 응용해서 페이지의 내용을 표시하려 하였지만 다른 클래스들과 충돌이 발생해 원하는 결과을 얻을 수 없었음.
+> 모달 코드를 기존과 다르게 새롭게 구성하여 해결
   
 * 문제3<br>
->프리 템플렛을 활용하여 탭기능을 사용하려 했으나 css가 다른 클래스값과 중복되어 원하는 결과 값을 얻을수 없었음.
+> 프리 템플렛을 활용하여 탭기능을 사용하려 했으나 css가 다른 클래스값과 중복되어 원하는 결과 값을 얻을수 없었음.
 > 다른방식의 탭기능의 코드를 적용 시켜 본뒤 재구축 하여 기능 문제를 해결하고 클래스를 변경하여 CSS문제를 해결.
  
 * 문제4<br>
- 문제점 설명 및 해결방안
+> 날씨 기상청 단기예보 API를 처음에 사용했는데 날씨가 1시간 단위로 나와서 원하는 데이터 값을 확보하는데 문제발생
+> 실시간 예상날씨를 사용할 수 있는 openweathermap API로 변경하여 사용. 또한 데이터가 영문 데이터로 나와서 한글로 매핑하고 데이터 가져오는데 어려움이 있었으나 극복.
+
+> 지도 - 카카오맵 API / 네이버지도 API 를 사용하려 했는데 네이버 지도API는 인증을 계속해도 데이터를 불러오지 못하는 문제가 발생, 카카오맵API는 자체 지오코딩 지원이 않되서 특정지역의 정보검색을 할수 없었음.
+> 지오코딩을 지원해주는 구글맵 API로 변경하여 사용.
+
+>사고다발지역 폴리곤 - 폴리곤 만드는 코드안에 배열로 사고지역들 폴리곤 위도 경도를 넣었는데 사고 갯수가 너무 많아서 속도도 느리고 오류도 자주 발생하는 문제가 있었음.
+>사고지역 폴리곤들을 주피터 노트북을 이용, csv로 만들어서 자바스크립트 코드에서 csv를 읽어오는 형식으로 수정함
 
 
