@@ -1,5 +1,5 @@
 # 라이크 라이프 (팀명: 블루힐)
-<br>
+<br><br>
 
 ## 👀 서비스 소개
 > 본 서비스는 여러 자전거길들을 소개하고 자전거 관련 정보를 제공 하는 자전거 전문 서비스이다. 
@@ -68,36 +68,70 @@
     </tr>
 </table>
 
-
+<br>
 <br>
 ## ⚙ 시스템 아키텍처(구조) 예시 
 ![서비스 아키텍처](https://user-images.githubusercontent.com/25995055/169925538-15867bd9-aa0b-42fc-a39b-88981e926e51.png)
-<br>
+<br><br>
 
 ## 📌 SW유스케이스
 ![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/be480097-c87f-4beb-8cf1-3751eed5f6f4)
-<br>
+<br><br>
 
 ## 📌 서비스 흐름도
 ![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/999f04fe-9716-46a5-ba2c-3966d397192f)
-<br>
+<br><br>
 
 ## 📌 ER다이어그램
 ![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/51916fa6-01a3-4784-9c78-b2a6300c3eeb)
-<br>
+<br><br>
 
 ## 🖥 화면 구성
 
-### 로그인/회원가입/회원괸리/회원수정/회원탈퇴
+### 메인화면 / 날씨정보/ 자전거 사고다발구간
 ![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/49fe2cdf-4ed4-4284-a30b-7ed251b72275)
 <br>
 
-### 옷 정보/코디 추천(날씨, 팁, 오늘의 코디, 참고할 수 있는 코디)
+### 아름다운 추천 자전거길 100선 / 지자체 추천 자전거길 / 바다를 품은섬 자전거길
 ![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/d3a7a0fa-7727-4783-8d61-629707c7a72a)
 <br>
 
 ### 국토종주 소개/ 국토종주 자전거길/ 지자체 공유자전거 안내
 ![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/f16d522a-7917-4c54-902c-13be7b65a39b)
 <br>
+<br>
+
+## 👨‍👩‍👦‍👦 팀원 역할
+<table>
+  <tr>
+    <td align="center"><img src="https://pbs.twimg.com/media/B-n6uPYUUAAZSUx.png" width="100" height="100"/></td>
+    <td align="center"><img src="https://item.kakaocdn.net/do/fd49574de6581aa2a91d82ff6adb6c0115b3f4e3c2033bfd702a321ec6eda72c" width="100" height="100"/></td>
+    <td align="center"><img src="https://mblogthumb-phinf.pstatic.net/20160127_177/krazymouse_1453865104404DjQIi_PNG/%C4%AB%C4%AB%BF%C0%C7%C1%B7%BB%C1%EE_%B6%F3%C0%CC%BE%F0.png?type=w2" width="100" height="100"/></td>
+    <td align="center"><img src="https://i.pinimg.com/236x/ed/bb/53/edbb53d4f6dd710431c1140551404af9.jpg" width="100" height="100"/></td>
+    <td align="center"><img src="https://mb.ntdtv.kr/assets/uploads/2019/01/Screen-Shot-2019-01-08-at-4.31.55-PM-e1546932545978.png" width="100" height="100"/></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>이재승</strong></td>
+    <td align="center"><strong>신민식</strong></td>
+    <td align="center"><strong>횡동휘</strong></td>
+    <td align="center"><strong>우태현</strong></td>
+    <td align="center"><strong>이창훈</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><b>PM, Frontend</b></td>
+    <td align="center"><b>Frontend, Backend</b></td>
+    <td align="center"><b>Data Modeling, Frontend</b></td>
+    <td align="center"><b> crawling, Frontend</b></td>
+    <td align="center"><b> crawling, Backend</b></td>
+    
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
+  </tr>
+</table>
 
 
