@@ -75,15 +75,15 @@
 <br>
 
 ## 📌 SW유스케이스
-![image](https://user-images.githubusercontent.com/25995055/178401023-9a015e66-aa6e-4d74-8564-9b1f9d306649.png)
+![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/be480097-c87f-4beb-8cf1-3751eed5f6f4)
 <br>
 
 ## 📌 서비스 흐름도
-![image](https://user-images.githubusercontent.com/25995055/178401048-d6484bda-a2d7-40e1-998b-2bd195cd9f89.png)
+![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/999f04fe-9716-46a5-ba2c-3966d397192f)
 <br>
 
 ## 📌 ER다이어그램
-![image](https://user-images.githubusercontent.com/25995055/169925318-102784c2-893f-4fd7-bec9-a54c44b669d4.png)
+![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/51916fa6-01a3-4784-9c78-b2a6300c3eeb)
 <br>
 
 ## 🖥 화면 구성
