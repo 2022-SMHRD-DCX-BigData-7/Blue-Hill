@@ -93,9 +93,11 @@
 <br>
 
 ### 옷 정보/코디 추천(날씨, 팁, 오늘의 코디, 참고할 수 있는 코디)
-![image](https://user-images.githubusercontent.com/25995055/178401127-287e6de2-4396-49fc-a107-59c4d5cd55c7.png)
+![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/d3a7a0fa-7727-4783-8d61-629707c7a72a)
 <br>
 
-### 일정/고객센터
-![image](https://user-images.githubusercontent.com/25995055/178401150-861f0e93-0f40-4fae-98c1-2099bf513c8d.png)
+### 국토종주 소개/ 국토종주 자전거길/ 지자체 공유자전거 안내
+![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/f16d522a-7917-4c54-902c-13be7b65a39b)
 <br>
+
+
