@@ -131,8 +131,8 @@
     <td align="center"><a href="https://github.com/jsl2695" target='_blank'>jsl2695</a></td>
     <td align="center"><a href="https://github.com/minsikkkk" target='_blank'>minsikkkk</a></td>
     <td align="center"><a href="https://github.com/ghkdehdgnlqwpoeurio" target='_blank'>ghkdehdgnlqwpoeurio</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/lickthwoo88" target='_blank'>lickthwoo88</a></td>
+    <td align="center"><a href="https://github.com/sogoodjace" target='_blank'>sogoodjace</a></td>
   </tr>
 </table>
 <br><br>
