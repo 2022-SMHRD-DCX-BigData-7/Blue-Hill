@@ -85,7 +85,8 @@
 <br><br>
 
 ## 📌 ER다이어그램
-![image](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085299/51916fa6-01a3-4784-9c78-b2a6300c3eeb)
+![스크린샷 2023-08-10 123348](https://github.com/2022-SMHRD-DCX-BigData-7/BlueHill/assets/139085398/2e91ee3a-4e0b-40fd-a25a-c026ca660aba)
+
 <br><br>
 
 ## 🖥 화면 구성
